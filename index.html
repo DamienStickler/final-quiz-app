@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .question {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .choices button {
+      display: block;
+      margin: 5px 0;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+    }
+    .correct {
+      background-color: #c8e6c9;
+    }
+    .incorrect {
+      background-color: #ffcdd2;
+    }
+    .explanation {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Interactive Quiz</h1>
+  <div id="quiz"></div>
+  <script>
+    const questions = [
+      {
+        question: "What are the three primary components of the U.S. criminal justice system?",
+        choices: [
+          "A. FBI, Homeland Security, and DEA",
+          "B. Law enforcement, courts, and corrections",
+          "C. Police, lawyers, and the National Guard",
+          "D. Civil court, juvenile court, and family court"
+        ],
+        answer: "B",
+        explanation: "The three main components are law enforcement, courts, and corrections."
+      },
+      {
+        question: "True or False: A balanced diet includes protein, fat, carbohydrates, vitamins, and minerals.",
+        choices: ["A. True", "B. False"],
+        answer: "A",
+        explanation: "A balanced diet must include macronutrients and micronutrients."
+      },
+      {
+        question: "What does 'deliberate indifference' in a correctional setting refer to?",
+        choices: [
+          "A. Giving incorrect medication",
+          "B. Intentionally ignoring serious medical needs",
+          "C. Choosing one treatment over another",
+          "D. Being rude to medical staff"
+        ],
+        answer: "B",
+        explanation: "Deliberate indifference means knowingly ignoring an inmate's serious medical need."
+      }
+    ];
+
+    const quiz = document.getElementById("quiz");
+
+    questions.forEach((q, idx) => {
+      const container = document.createElement("div");
+      container.className = "question";
+
+      const qText = document.createElement("h3");
+      qText.textContent = `${idx + 1}. ${q.question}`;
+      container.appendChild(qText);
+
+      const choices = document.createElement("div");
+      choices.className = "choices";
+
+      q.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice;
+        btn.onclick = () => {
+          const isCorrect = choice[0] === q.answer;
+          btn.className = isCorrect ? "correct" : "incorrect";
+          if (!isCorrect) {
+            const correctBtn = [...choices.children].find(b => b.textContent[0] === q.answer);
+            if (correctBtn) correctBtn.className = "correct";
+          }
+          const explanation = document.createElement("div");
+          explanation.className = "explanation";
+          explanation.textContent = `Explanation: ${q.explanation}`;
+          if (!container.querySelector(".explanation")) {
+            container.appendChild(explanation);
+          }
+          [...choices.children].forEach(b => (b.disabled = true));
+        };
+        choices.appendChild(btn);
+      });
+
+      container.appendChild(choices);
+      quiz.appendChild(container);
+    });
+  </script>
+</body>
+</html>
